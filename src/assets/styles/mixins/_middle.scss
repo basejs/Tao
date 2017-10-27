@@ -1,0 +1,17 @@
+//垂直居中+水平居中
+@mixin middle($x:0, $y:-50%) {
+  position: absolute;
+  @if $y!=0 {
+    top: 50%;
+    left: $x;
+  }
+  @if $x!=0 {
+    left: 50%;
+    $x: -50%;
+  }
+  transform: translateX($x) translateY($y);
+  -webkit-transform: translateX($x) translateY($y);
+  -moz-transform: translateX($x) translateY($y);
+  -ms-transform: translateX($x) translateY($y);
+  -o-transform: translateX($x) translateY($y);
+}

@@ -1,0 +1,11 @@
+@import '~@/assets/styles/reset.css';
+@import '~@/assets/styles/mixins/_clearfix.scss';
+
+html,
+body {
+  font-size: 12px;
+  font-family: 'PingFangSC', 'MicrosoftYaHei', 'HelveticaNeue';
+}
+.mobile{
+  height: 100%;
+}
