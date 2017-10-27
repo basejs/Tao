@@ -71,10 +71,12 @@ exports.styleLoaders = function(options) {
   return output
 }
 
-//获取多级的入口文件
+// 获取多页打包的入口文件
 exports.getMultiEntries = function() {
-  //模块存在apps中便于查询
-  var files = glob.sync("src/?(manager|mobile)/index.html")
+  // 配置依赖index.html，不参与打包的目录请不要添加index.html
+  var files1 = glob.sync('src/**/index.html')
+  var files2 = glob.sync('src/index.html')
+  var files = [].concat(files1).concat(files2)
   var entries = {}
 
   files.forEach(function(f) {

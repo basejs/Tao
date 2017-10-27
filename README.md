@@ -2,18 +2,17 @@
 
 > 根据项目经验提炼的一套通用型前端架构，采用Vue技术栈，基于vue-cli搭建集成eslint(airbnb)。集成多页打包配置，便于项目扩展，模块拆分。
 > 集成elementui框架，基于vue-i18n集成多语言环境。
-> 
 
-## Build Setup
+## 启动步骤
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:9527
+# 启动本地服务 localhost:9527/manager/index
 npm start
 
-# build for production with minification
+# 打包
 npm run build
 
 # build for production and view the bundle analyzer report
@@ -21,11 +20,6 @@ npm run build --report
 ```
 
 ## 注意事项
-eslit
-class名称遵循BEM规范
-通用组件才写入全局components，业务组件放在模块下
-全部路由跳转选用<router-link></router-link>或this.$router.push()，不要用a标签拼接
-
 
 #### 目录结构
 只提取我认为重要的目录或文件进行标注说明。
@@ -89,12 +83,16 @@ Tao/
   │       ├── router/  路由配置目录
   │       ├── components/  模块下公共组件
   │       ├── home/  模块首页
-  │       ├── notfound/  404
   │       ├── index.html  模块打包模板页
   │       ├── index.js  模块实例化入口
   │       ├── main.vue  模块路由入口
   │   ├──
   │   ├── mobile/  mobile模块同manager模块
+  │   ├──
+  │   ├── index.html  首页
+  │   ├── index.js  首页实例化入口
+  │   ├── main.vue  首页路由入口
+  │   ├── home/  全局路由首页(其他根路由也均可放在这一层)
   │
   ├── public/  静态资源目录(不用webpack加载的资源)
   │
@@ -116,3 +114,42 @@ Tao/
   │
   └── etc
 ```
+
+#### 代码段说明
+**页面标题**
+```javascript
+  // mobile模块已集成vue-wechat-title，用通过router中定义meta修改标题
+  // src/mobile/router/inde.js 
+  {
+    path: '/mobile',
+    component: () => import('@/mobile/main.vue'),
+    meta: {
+      title: Vue.t('mobile.title'),
+    },
+  }
+```
+**路由拦截**
+```javascript
+// src/manager/common/plugins/axios.js
+import commonAxios from '@/common/plugins/axios'
+
+const showError = (errMsg) => {
+  const { prototype: { $message } } = Vue
+  $message({
+    showClose: true,
+    message: errMsg,
+    type: 'error'
+  })
+}
+// commonAxios支持第二个参数，如果传值则替换默认拦截
+commonAxios(showError)
+```
+#### 建议或约定
+
+-  eslit建议不要关闭。
+-  class名称遵循BEM规范。
+-  全部路由跳转使用<router-link>或router.push()，不要用a标签
+-  如果模块比较大(资源文件或页面比较多)，可以考虑分离全局assets目录下的styles和images目录到对应模块下
+
+#### 已知问题
+-  多页打包带来vuex状态好像无法共享，待解决。

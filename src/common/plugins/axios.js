@@ -1,13 +1,32 @@
 import Vue from 'vue'
 
-export default (errcb, showError) => {
+let timer = null
+export default (showErr, cb) => {
   const { t } = Vue
   axios.defaults.timeout = 60000
   axios.interceptors.response.use(
     response => {
       if(response.data.code !== 0) {
-        if(errcb(response.data.code) !== false) {
-          showError(response.data.msg || t('common.network.exception'))
+        if(typeof cb === 'function') {
+          if(cb(response.data.code) !== false) {
+            showErr(response.data.msg || t('common.network.exception'))
+          }
+        } else {
+          switch (response.data.code) {
+            // 登陆失效
+            case 20001:
+              if(!timer) {
+                timer = setTimeout(() => {
+                  clearTimeout(timer)
+                  timer = null
+                  // 清除本地缓存
+                  // 跳转登录页
+                }, 500)
+              }
+              break
+            default:
+              break
+          }
         }
       }
       try {
@@ -35,7 +54,7 @@ export default (errcb, showError) => {
           error.message = t('common.network.exception')
           break
       }
-      showError(error.message)
+      showErr(error.message)
 
       return Promise.resolve({
         data: {},

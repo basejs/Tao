@@ -11,6 +11,7 @@ var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
+var utils = require('./utils')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -49,12 +50,20 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
+var pageArr = Object.keys(utils.getMultiEntries()).filter(function(item) {
+  return item !== 'index'
+})
+var rewrites = pageArr.map(function(page) {
+  return {
+    from: new RegExp('\/'+ page.split('/')[0] +'(\/?$|\/[^.]+$)'), to: '/' + page + '.html'
+  }
+})
+// 如果需要自定义rewrites规则，比如将m指向mobile，可以
+// rewrites.push({ from: /\/m($|\/[^.]+$)/, to: '/mobile/index.html' })
+
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')({
-  rewrites: [
-    { from: /\/admin\/?/, to: '/manager/index.html' },
-    { from: /\/m(\/|\b)/, to: '/mobile/index.html' }
-  ],
+  rewrites: rewrites,
 }))
 
 // serve webpack bundle output

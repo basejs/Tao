@@ -5,4 +5,4 @@
 </template>
 <script>
 
-</script>main
+</script>

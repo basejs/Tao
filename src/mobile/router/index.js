@@ -7,26 +7,19 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/*',
+      path: '/mobile',
       component: () => import('@/mobile/main.vue'),
       meta: {
         title: Vue.t('mobile.title'),
       },
       children: [
         {
-          path: 'index',
+          path: '',
           component: () => import('@/mobile/home/index.vue'),
           meta: {
             title: Vue.t('mobile.title'),
           },
         },
-        {
-          path: '',
-          component: () => import('@/mobile/notfound/index.vue'),
-          meta: {
-            title: Vue.t('mobile.notfound.title'),
-          },
-        }
       ]
     },
   ]

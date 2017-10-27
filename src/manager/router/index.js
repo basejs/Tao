@@ -7,19 +7,17 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      // 为兼容history需要一个全局路由
-      path: '/*',
+      path: '/manager',
       component: () => import('@/manager/main.vue'),
       children: [
         {
-          path: 'index',
+          path: '',
           component: () => import('@/manager/home/index.vue'),
         },
-        // 404
         {
-          path: '',
-          component: () => import('@/manager/notfound/index.vue'),
-        }
+          path: 'xxx',
+          component: () => import('@/manager/home/index.vue'),
+        },
       ]
     },
   ]
