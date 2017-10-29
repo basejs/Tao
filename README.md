@@ -178,6 +178,14 @@ const showError = (errMsg) => {
 commonAxios(showError)
 ```
 
+**移动端缩放**
+```sass
+// src/assets/styles/function/_px2rem.scss  采用lib-flexible计算
+@function px2rem($px, $designWidth: 750) {
+  @return ($px / $designWidth) * 10rem;
+}
+```
+
 #### 建议或约定
 -  eslit建议不要关闭。
 -  class名称遵循BEM规范。
