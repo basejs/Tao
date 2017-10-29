@@ -8,16 +8,16 @@ export default new Router({
   routes: [
     {
       path: '/manager',
-      component: () => import('@/manager/main.vue'),
+      component: () => import('../main.vue'),
       children: [
         {
           path: '',
-          component: () => import('@/manager/home/index.vue'),
+          component: () => import('../home/index.vue'),
         },
         {
-          path: 'xxx',
-          component: () => import('@/manager/home/index.vue'),
-        },
+          path: '*',
+          component: () => import('@/notfound/index.vue'),
+        }
       ]
     },
   ]

@@ -14,6 +14,10 @@ export default new Router({
           path: '',
           component: () => import('@/home/index.vue'),
         },
+        {
+          path: '*',
+          component: () => import('@/notfound/index.vue'),
+        }
       ]
     },
   ]

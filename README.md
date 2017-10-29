@@ -77,22 +77,27 @@ Tao/
   │           ├── manager.js  manager模块的mutations，(只是名义上分离，实际上也能修改common中的state)
   │           ├── mobile.js  mobile模块的mutations
   │   ├──
-  │   ├── manager/  manager模块
-  │       ├── 
-  │       ├── common/  对应全局common/
-  │       ├── router/  路由配置目录
-  │       ├── components/  模块下公共组件
-  │       ├── home/  模块首页
-  │       ├── index.html  模块打包模板页
-  │       ├── index.js  模块实例化入口
-  │       ├── main.vue  模块路由入口
+  │   ├── apps/  多页模块目录，目录下所有包含index.html目录会被打包成多页模块
+  │       ├──
+  │       ├── manager/  manager模块
+  │           ├── 
+  │           ├── common/  对应全局common/
+  │           ├── router/  路由配置目录
+  │           ├── components/  模块下公共组件
+  │           ├── home/  模块首页路由
+  │           ├── index.html  模块打包模板
+  │           ├── index.js  模块实例化入口
+  │           ├── main.vue  模块路由入口
+  │       ├──
+  │       ├── mobile/  mobile模块同manager模块
+  │   ├── 
+  │   ├── home/  全局首页路由
+  │   ├── 
+  │   ├── notfound/  全局404路由(其他全局路由均可放这一层)
   │   ├──
-  │   ├── mobile/  mobile模块同manager模块
-  │   ├──
-  │   ├── index.html  首页
+  │   ├── index.html  首页打包模板
   │   ├── index.js  首页实例化入口
   │   ├── main.vue  首页路由入口
-  │   ├── home/  全局路由首页(其他根路由也均可放在这一层)
   │
   ├── public/  静态资源目录(不用webpack加载的资源)
   │
@@ -120,8 +125,8 @@ Tao/
 ```javascript
 // build/utils.js 默认已支持src目录下所有包含index.html的目录进行多页打包
 exports.getMultiEntries = function() {
-  // 配置依赖index.html，不参与打包的目录请不要添加index.html
-  var files1 = glob.sync('src/**/index.html')
+  // 配置依赖index.html，自动识别src/apps下的目录进行多页打包
+  var files1 = glob.sync('src/apps/**/index.html')
   var files2 = glob.sync('src/index.html')
   var files = [].concat(files1).concat(files2)
   var entries = {}
@@ -130,7 +135,7 @@ exports.getMultiEntries = function() {
     var name = /((?:.*\/)index)\.html/.exec(f)[1] //moudule/index这样的文件名
     if (!name) return
 
-    entries[name.replace(/^src\//, '')] = './' + name + '.js'
+    entries[name.replace(/^src\/(apps\/)?/, '')] = './' + name + '.js'
   })
   return entries
 }

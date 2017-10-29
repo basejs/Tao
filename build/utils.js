@@ -73,8 +73,8 @@ exports.styleLoaders = function(options) {
 
 // 获取多页打包的入口文件
 exports.getMultiEntries = function() {
-  // 配置依赖index.html，不参与打包的目录请不要添加index.html
-  var files1 = glob.sync('src/**/index.html')
+  // 配置依赖index.html，自动识别src/apps下的目录进行多页打包
+  var files1 = glob.sync('src/apps/**/index.html')
   var files2 = glob.sync('src/index.html')
   var files = [].concat(files1).concat(files2)
   var entries = {}
@@ -83,7 +83,7 @@ exports.getMultiEntries = function() {
     var name = /((?:.*\/)index)\.html/.exec(f)[1] //moudule/index这样的文件名
     if (!name) return
 
-    entries[name.replace(/^src\//, '')] = './' + name + '.js'
+    entries[name.replace(/^src\/(apps\/)?/, '')] = './' + name + '.js'
   })
   return entries
 }
