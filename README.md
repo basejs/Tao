@@ -9,7 +9,7 @@
 # 安装依赖
 npm install
 
-# 启动本地服务 localhost:9527/manager/index
+# 启动本地服务 localhost:9527
 npm start
 
 # 打包
@@ -116,6 +116,34 @@ Tao/
 ```
 
 #### 代码段说明
+**多页打包配置**
+```javascript
+// build/utils.js 默认已支持src目录下所有包含index.html的目录进行多页打包
+exports.getMultiEntries = function() {
+  // 配置依赖index.html，不参与打包的目录请不要添加index.html
+  var files1 = glob.sync('src/**/index.html')
+  var files2 = glob.sync('src/index.html')
+  var files = [].concat(files1).concat(files2)
+  var entries = {}
+
+  files.forEach(function(f) {
+    var name = /((?:.*\/)index)\.html/.exec(f)[1] //moudule/index这样的文件名
+    if (!name) return
+
+    entries[name.replace(/^src\//, '')] = './' + name + '.js'
+  })
+  return entries
+}
+```
+
+**支持history路由**
+```javascript
+// build/dev-server.js 默认已支持所有多页目录history，如需修改，请重写rewrites
+app.use(require('connect-history-api-fallback')({
+  rewrites: rewrites,
+}))
+```
+
 **页面标题**
 ```javascript
   // mobile模块已集成vue-wechat-title，用通过router中定义meta修改标题
@@ -144,12 +172,13 @@ const showError = (errMsg) => {
 // commonAxios支持第二个参数，如果传值则替换默认拦截
 commonAxios(showError)
 ```
-#### 建议或约定
 
+#### 建议或约定
 -  eslit建议不要关闭。
 -  class名称遵循BEM规范。
--  全部路由跳转使用<router-link>或router.push()，不要用a标签
+-  **多页模块间跳转请使用href**，模块内部路由跳转使用<router-link>或router.push()，不要用a标签。
 -  如果模块比较大(资源文件或页面比较多)，可以考虑分离全局assets目录下的styles和images目录到对应模块下
+-  模块(多页模块)间vuex状态不共享，如果涉及跨模块共享vuex时，请善用本地缓存配合
 
 #### 已知问题
--  多页打包带来vuex状态好像无法共享，待解决。
+-  多页打包带来vuex状态好像无法共享，暂时没有想到很好的办法解决。
