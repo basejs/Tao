@@ -1,19 +1,30 @@
 @import '~@/assets/styles/reset.css';
-@import '~@/assets/styles/mixins/_clearfix.scss';
-@import '~@/assets/styles/functions/_px2rem.scss';
+@import '~@/assets/styles/functions/_px2vw.scss';
 
-html,body {
+html,
+body {
   font-size: 12px;
   font-family: 'PingFangSC', 'MicrosoftYaHei', 'HelveticaNeue';
   height: 100%;
 }
+
 .wrapper {
   height: 100%;
   overflow: auto;
 }
-.mobile{
-  width: px2rem(750);
-  min-height: 100%;
+
+.mobile {
   margin: auto;
-  background: #f5f5f5;
+  width: _px2vw(750);
+  min-height: 100%;
+  &-home {
+    &-test {
+      width: px2vw(20);
+      height: px2vw(20);
+      border-radius: 100%;
+      background: #f00;
+      margin: auto;
+      position: relative;
+    }
+  }
 }

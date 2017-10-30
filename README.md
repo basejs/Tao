@@ -179,11 +179,28 @@ const showError = (errMsg) => {
 commonAxios(showError)
 ```
 
-**移动端缩放**
+**移动端适配**
 ```sass
-// src/assets/styles/function/_px2rem.scss  采用lib-flexible计算
+// 移动端提供了2种适配方式lib-flexible和vw
+// src/assets/styles/function/_px2rem.scss  依赖flexible计算根字体的font-size
+// 需在src/apps/mobile/index.html中引入<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 @function px2rem($px, $designWidth: 750) {
   @return ($px / $designWidth) * 10rem;
+}
+// src/assets/styles/function/_px2vw.scss
+// 建议使用vw进行适配，因为这种方式对于小数圆角有更好的支持，并且不依赖于js计算，更加的优雅，如果需要了解更多的用法，可以参考http://www.w3cplus.com/css/vw-for-layout.html
+@function px2vw($px, $designWidth: 750) {
+  @return ($px * (100 / $designWidth)) * 1vw;
+}
+
+// 2者用法都类似
+.test1 {
+  width: px2vw(20);
+  height: px2vw(20);
+}
+.test1 {
+  width: px2rem(20);
+  height: px2rem(20);
 }
 ```
 
