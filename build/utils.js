@@ -74,8 +74,9 @@ exports.styleLoaders = function(options) {
 // 获取多页打包的入口文件
 exports.getMultiEntries = function() {
   // 配置依赖index.html，自动识别src/apps下的目录进行多页打包
-  var files1 = glob.sync('src/apps/**/index.html')
-  var files2 = glob.sync('src/index.html')
+  var files1 = glob.sync('src/index.html')
+  var files2 = glob.sync('src/apps/**/index.html')
+  // 如果不需要多页配置，只需 files2 = []即可
   var files = [].concat(files1).concat(files2)
   var entries = {}
 

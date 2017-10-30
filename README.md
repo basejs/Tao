@@ -123,11 +123,12 @@ Tao/
 #### 代码段说明
 **多页打包配置**
 ```javascript
-// build/utils.js 默认已支持src目录下所有包含index.html的目录进行多页打包
+// build/utils.js
 exports.getMultiEntries = function() {
   // 配置依赖index.html，自动识别src/apps下的目录进行多页打包
-  var files1 = glob.sync('src/apps/**/index.html')
-  var files2 = glob.sync('src/index.html')
+  var files1 = glob.sync('src/index.html')
+  var files2 = glob.sync('src/apps/**/index.html')
+  // 如果不需要多页配置，只需 files2 = []即可
   var files = [].concat(files1).concat(files2)
   var entries = {}
 
@@ -174,7 +175,7 @@ const showError = (errMsg) => {
     type: 'error'
   })
 }
-// commonAxios支持第二个参数，如果传值则替换默认拦截
+// commonAxios第一个参数为错误处理方法，还支持第二个参数，如果传值则替换默认拦截
 commonAxios(showError)
 ```
 
@@ -190,7 +191,7 @@ commonAxios(showError)
 -  eslit建议不要关闭。
 -  class名称遵循BEM规范。
 -  **多页模块间跳转请使用href**，模块内部路由跳转使用<router-link>或router.push()，不要用a标签。
--  如果模块比较大(资源文件或页面比较多)，可以考虑分离全局assets目录下的styles和images目录到对应模块下
+-  如果模块比较大(资源文件或页面比较多)，可以考虑彻底分离全局assets目录到对应模块下
 -  模块(多页模块)间vuex状态不共享，如果涉及跨模块共享vuex时，请善用本地缓存配合
 
 #### 已知问题
