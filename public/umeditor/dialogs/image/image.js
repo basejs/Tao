@@ -35,8 +35,8 @@
 //                }
 
                 return arr.push({
-                    _src: node.src,
-                    src: node.src
+                    _src: node.getAttribute('src'),
+                    src: node.getAttribute('src')
                 });
             });
 
@@ -97,7 +97,6 @@
             }
         },
         callback: function (editor, $w, url, state) {
-
             if (state == "SUCCESS") {
                 //显示图片计数+1
                 Upload.showCount++;
@@ -194,19 +193,17 @@
             }
         },
         submit: function (callback) {
-
             var me = this,
                 input = $( '<input style="filter: alpha(opacity=0);" class="edui-image-file" type="file" hidefocus="" name="upfile" accept="image/gif,image/jpeg,image/png,image/jpg,image/bmp">'),
                 input = input[0];
 
             $(me.dialog).delegate( ".edui-image-file", "change", function ( e ) {
-
                 if ( !this.parentNode ) {
                     return;
                 }
 
                 $('<iframe name="up"  style="display: none"></iframe>').insertBefore(me.dialog).on('load', function(){
-                    var r = this.contentWindow.document.body.innerHTML;
+                    var r = this.contentWindow.document.body.innerHTML.replace(/^.*({[^{}]+}).*$/, '$1');
                     if(r == '')return;
                     me.uploadComplete(r);
                     $(this).unbind('load');

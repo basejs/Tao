@@ -1,66 +1,70 @@
 import Vue from 'vue'
+// import Qs from 'qs'
+
+axios.defaults.timeout = 0
+
+const { t, prototype: { $message, MessageBox } } = Vue
+const showErrorMsg = (msg) => {
+  const errMsg = msg || t('common.network.exception')
+  if(MessageBox) {
+    MessageBox({
+      title: Vue.t('common.network.title'),
+      message: errMsg,
+    })
+  }
+  if($message) {
+    $message({
+      showClose: true,
+      message: errMsg,
+      type: 'error',
+      duration: 3000
+    })
+  }
+}
+
+axios.interceptors.request.use(
+  config => {
+    config.headers['X-Requested-With'] = 'XMLHttpRequest'
+    // config.data = Qs.stringify(config.data)
+    return config
+  },
+)
 
 let timer = null
-export default (showErr, cb) => {
-  const { t } = Vue
-  axios.defaults.timeout = 60000
-  axios.interceptors.response.use(
-    response => {
-      if(response.data.code !== 0) {
-        if(typeof cb === 'function') {
-          if(cb(response.data.code) !== false) {
-            showErr(response.data.msg || t('common.network.exception'))
+axios.interceptors.response.use(
+  response => {
+    if(response.data.code !== 0) {
+      switch (response.data.code) {
+        // 登陆失效
+        case 20001:
+          if(!timer) {
+            // showErrorMsg(response.data.msg)
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+              timer = null
+              // 跳转登录
+              location.href = response.data.data
+            }, 500)
           }
-        } else {
-          switch (response.data.code) {
-            // 登陆失效
-            case 20001:
-              if(!timer) {
-                timer = setTimeout(() => {
-                  clearTimeout(timer)
-                  timer = null
-                  // 清除本地缓存
-                  // 跳转登录页
-                }, 500)
-              }
-              break
-            default:
-              break
-          }
-        }
-      }
-      try {
-        if(!response.data) {
-          response.data = {}
-        }
-        if(!response.data.data) {
-          response.data.data = {}
-        }
-      } catch (err) {
-        response.data = {
-          code: 10000,
-          data: {},
-          msg: t('common.network.exception')
-        }
-      }
-      return response.data
-    },
-    error => {
-      switch (error.code) {
-        case 'ECONNABORTED':
-          error.message = t('common.network.timeout')
           break
         default:
-          error.message = t('common.network.exception')
+          showErrorMsg(response.data.msg)
           break
       }
-      showErr(error.message)
-
-      return Promise.resolve({
-        data: {},
-        code: error.code || 10001,
-        msg: error.message
-      })
     }
-  )
-}
+    if(!response.data.data) {
+      response.data.data = {}
+    }
+    return response.data
+  },
+  error => {
+    const errorMsg = t('common.network.exception')
+    showErrorMsg(errorMsg)
+    const errCode = error.response ? error.response.status : '-1'
+    return Promise.reject({
+      data: null,
+      code: errCode,
+      msg: errorMsg
+    })
+  }
+)

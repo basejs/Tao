@@ -3,7 +3,9 @@
     class="upload"
     :class="name"
     :action="action"
+    :accept="accepts"
     :multiple="multiple"
+    :drag="drag"
     :show-file-list="showFileList"
     :auto-upload="autoUpload"
     :before-upload="beforeUpload"
@@ -12,10 +14,10 @@
   >
     <el-button type="primary" :loading="uploadStatus === 1">
       <template v-if="uploadStatus === 1">
-        {{ $t('common.upload.btn.progress') }}
+        上传中
       </template>
       <template v-else>
-        {{ $t('common.upload.btn.default') }}
+        <slot>立即上传</slot>
       </template>
     </el-button>
   </el-upload>
@@ -33,8 +35,14 @@ export default {
     multiple: {
       type: Boolean
     },
-    accept: {
-      type: String
+    drag: {
+      type: Boolean,
+    },
+    fileTypes: {
+      type: Array,
+      default() {
+        return ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'ico']
+      },
     },
     before: {
       type: [Function, String],
@@ -55,6 +63,30 @@ export default {
   data() {
     return {
       uploadStatus: 0, // 0:未上传,1:上传中,2:上传成功,3:上传错误
+      mime: {
+        png: 'image/png',
+        jpg: 'image/jpg',
+        jpeg: 'image/jpeg',
+        bmp: 'image/bmp',
+        gif: 'image/gif',
+        ico: 'image/ico',
+        xls: 'application/vnd.ms-excel',
+        xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        csv: 'text/csv',
+      },
+    }
+  },
+  computed: {
+    accepts() {
+      const types = []
+      if(this.fileTypes && this.fileTypes.length > 0) {
+        Object.keys(this.mime).forEach((key) => {
+          if(this.fileTypes.findIndex(c => c.toLowerCase() === key.toString()) > -1) {
+            types.push(this.mime[key])
+          }
+        })
+      }
+      return types.join(',')
     }
   },
   methods: {
@@ -63,7 +95,13 @@ export default {
         const beforeResult = this.before(file)
         if(beforeResult === true || beforeResult === false) return beforeResult
       }
-
+      const fileExtension = file.name.substr(file.name.lastIndexOf('.') + 1, file.name.length - file.name.lastIndexOf('.'))
+      if(!fileExtension ||
+        fileExtension.length === 0 ||
+        this.fileTypes.findIndex(c => c.toLowerCase() === fileExtension.toLowerCase()) < 0) {
+        this.error(this.$t('common.upload.error.filetype', { type: this.fileTypes.join(',') }))
+        return false
+      }
       const isLtSize = file.size / 1024 / 1024 < this.size
       this.uploadStatus = 1
       if(!isLtSize) {
@@ -88,7 +126,7 @@ export default {
       this.uploadStatus = 3
       this.$message.error(errMisg)
       this.$emit('err', err)
-    }
+    },
   }
 }
 </script>

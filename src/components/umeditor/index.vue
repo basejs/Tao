@@ -1,12 +1,12 @@
 <template>
-  <script type="text/plain" :id="name" :style="{
+  <script type="text/plain" class="umeditor" :id="name" :style="{
     height: height ? (isNaN(height) ? height : `${height}px`) : '100%',
     width: width ? (isNaN(width) ? width : `${width}px`) : '100%',
-    'box-sizing': 'border-box'
   }"></script>
 </template>
 <script>
 import Vue from 'vue'
+import './index.scss'
 
 export default {
   props: {
@@ -39,8 +39,10 @@ export default {
       toolbar: ['source | undo redo | bold italic underline strikethrough | superscript subscript | forecolor backcolor | removeformat |',
         'insertorderedlist insertunorderedlist | selectall cleardoc paragraph | fontfamily fontsize',
         '| justifyleft justifycenter justifyright justifyjustify |',
-        'link unlink | map',
-        '| horizontal print preview', 'drafts', 'formula'],
+        'link unlink | emotion image video  | map',
+        '| horizontal print preview fullscreen', 'drafts', 'formula'],
+      imageUrl: '/FileUpload',
+      imagePath: '',
       ...this.options,
     })
     this.um.addListener('blur', () => {

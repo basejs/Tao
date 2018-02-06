@@ -56,48 +56,46 @@ Tao/
   │       ├── libs/  第三方js
   │       ├── mixins/  Vue混合对象
   │       ├── plugins/  全局行为
-  │           ├──
+  │           ├── 
   │           ├── axios.js  axios拦截器
   │           ├── filter.js  绑定全局filter(默认只有一个时间格式format)
   │           ├── i18n.js  配置多语言环境(默认中文)
+  │           ├── router.js  全局路由处理
   │           ├── index.js  入口文件
   │   ├──
   │   ├── components/  全局组件
   │   ├──
-  │   ├── requests/  请求目录(分离所有的axios的请求，按模块书写)
+  │   ├── api/  请求目录(分离所有的axios的请求，按模块书写)
   │   ├──
-  │   ├── vuex/  全局vuex管理
+  │   ├── store/  vuex所有模块共享，不跟随打包拆分以便于管理
   │       ├──
-  │       ├── state/  state划分同mutations/
-  │       ├── actions/  actions没咋用过
+  │       ├── getters/ 
+  │       ├── state/
+  │       ├── actions/  
   │       ├── mutations/ 
   │           ├──
-  │           ├── common.js  全局mutations，用于修改../state/common.js中定义的state
-  │           ├── index.js  入口文件
-  │           ├── manager.js  manager模块的mutations，(只是名义上分离，实际上也能修改common中的state)
-  │           ├── mobile.js  mobile模块的mutations
+  │           ├── common.js  全局mutations
+  │           ├── index.js  将同目录下其他的mutations绑定到store对象
   │   ├──
   │   ├── apps/  多页模块目录，目录下所有包含index.html目录会被打包成多页模块
   │       ├──
-  │       ├── manager/  manager模块
+  │       ├── m/  移动端
   │           ├── 
-  │           ├── common/  对应全局common/
   │           ├── router/  路由配置目录
   │           ├── components/  模块下公共组件
-  │           ├── home/  模块首页路由
+  │           ├── containers/  模块首页路由
+  │               ├── home/  首页视图
+  │               ├── main.vue  路由入口视图
   │           ├── index.html  模块打包模板
   │           ├── index.js  模块实例化入口
-  │           ├── main.vue  模块路由入口
   │       ├──
-  │       ├── mobile/  mobile模块同manager模块
   │   ├── 
-  │   ├── home/  全局首页路由
+  │   ├── containers/  管理端视图目录
+  │       ├── home/  管理端首页视图
+  │       ├── main.vue  管理端首页视图
   │   ├── 
-  │   ├── notfound/  全局404路由(其他全局路由均可放这一层)
-  │   ├──
-  │   ├── index.html  首页打包模板
-  │   ├── index.js  首页实例化入口
-  │   ├── main.vue  首页路由入口
+  │   ├── index.html  管理端首页模板
+  │   ├── index.js  管理端实例化入口
   │
   ├── public/  静态资源目录(不用webpack加载的资源)
   │
@@ -129,8 +127,14 @@ exports.getMultiEntries = function() {
   var files1 = glob.sync('src/index.html')
   var files2 = glob.sync('src/apps/**/index.html')
   // 如果不需要多页配置，只需 files2 = []即可
-  var files = [].concat(files1).concat(files2)
+  var files = []
   var entries = {}
+  if(files1) {
+    files = files.concat(files1)
+  }
+  if(files2) {
+    files = files.concat(files2)
+  }
 
   files.forEach(function(f) {
     var name = /((?:.*\/)index)\.html/.exec(f)[1] //moudule/index这样的文件名
@@ -153,30 +157,14 @@ app.use(require('connect-history-api-fallback')({
 **页面标题**
 ```javascript
   // mobile模块已集成vue-wechat-title，用通过router中定义meta修改标题
-  // src/mobile/router/inde.js 
+  // src/m/router/inde.js 
   {
-    path: '/mobile',
-    component: () => import('@/mobile/main.vue'),
+    path: '/m',
+    component: () => import('../containers/main.vue'),
     meta: {
-      title: Vue.t('mobile.title'),
+      title: '首页',
     },
   }
-```
-**路由拦截**
-```javascript
-// src/manager/common/plugins/axios.js
-import commonAxios from '@/common/plugins/axios'
-
-const showError = (errMsg) => {
-  const { prototype: { $message } } = Vue
-  $message({
-    showClose: true,
-    message: errMsg,
-    type: 'error'
-  })
-}
-// commonAxios第一个参数为错误处理方法，还支持第二个参数，如果传值则替换默认拦截
-commonAxios(showError)
 ```
 
 **移动端适配**

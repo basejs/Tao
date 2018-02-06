@@ -44,7 +44,7 @@ var browser = UM.browser = function(){
          * }
              * ```
              */
-            ie    :  /(msie\s|trident.*rv:)([\w.]+)/.test(agent),
+            ie		:  /(msie\s|trident.*rv:)([\w.]+)/.test(agent),
 
             /**
              * @property {boolean} opera 检测当前浏览器是否为Opera
@@ -55,7 +55,7 @@ var browser = UM.browser = function(){
          * }
              * ```
              */
-            opera : ( !!opera && opera.version ),
+            opera	: ( !!opera && opera.version ),
 
             /**
              * @property {boolean} webkit 检测当前浏览器是否是webkit内核的浏览器
@@ -66,7 +66,7 @@ var browser = UM.browser = function(){
          * }
              * ```
              */
-            webkit  : ( agent.indexOf( ' applewebkit/' ) > -1 ),
+            webkit	: ( agent.indexOf( ' applewebkit/' ) > -1 ),
 
             /**
              * @property {boolean} mac 检测当前浏览器是否是运行在mac平台下
@@ -77,7 +77,7 @@ var browser = UM.browser = function(){
          * }
              * ```
              */
-            mac : ( agent.indexOf( 'macintosh' ) > -1 ),
+            mac	: ( agent.indexOf( 'macintosh' ) > -1 ),
 
             /**
              * @property {boolean} quirks 检测当前浏览器是否处于“怪异模式”下
@@ -8190,75 +8190,75 @@ UM.plugins['formula'] = function () {
 
 UM.plugins.xssFilter = function() {
 
-  var config = UMEDITOR_CONFIG;
-  var whiteList = config.whiteList;
+	var config = UMEDITOR_CONFIG;
+	var whiteList = config.whiteList;
 
-  function filter(node) {
+	function filter(node) {
 
-    var tagName = node.tagName;
-    var attrs = node.attrs;
+		var tagName = node.tagName;
+		var attrs = node.attrs;
 
-    if (!whiteList.hasOwnProperty(tagName)) {
-      node.parentNode.removeChild(node);
-      return false;
-    }
+		if (!whiteList.hasOwnProperty(tagName)) {
+			node.parentNode.removeChild(node);
+			return false;
+		}
 
-    UM.utils.each(attrs, function (val, key) {
+		UM.utils.each(attrs, function (val, key) {
 
-      if (UM.utils.indexOf(whiteList[tagName], key) === -1) {
-        node.setAttr(key);
-      }
-    });
-  }
+			if (UM.utils.indexOf(whiteList[tagName], key) === -1) {
+				node.setAttr(key);
+			}
+		});
+	}
 
-  // 添加inserthtml\paste等操作用的过滤规则
-  if (whiteList && config.xssFilterRules) {
-    this.options.filterRules = function () {
+	// 添加inserthtml\paste等操作用的过滤规则
+	if (whiteList && config.xssFilterRules) {
+		this.options.filterRules = function () {
 
-      var result = {};
+			var result = {};
 
-      UM.utils.each(whiteList, function(val, key) {
-        result[key] = function (node) {
-          return filter(node);
-        };
-      });
+			UM.utils.each(whiteList, function(val, key) {
+				result[key] = function (node) {
+					return filter(node);
+				};
+			});
 
-      return result;
-    }();
-  }
+			return result;
+		}();
+	}
 
-  var tagList = [];
+	var tagList = [];
 
-  UM.utils.each(whiteList, function (val, key) {
-    tagList.push(key);
-  });
+	UM.utils.each(whiteList, function (val, key) {
+		tagList.push(key);
+	});
 
-  // 添加input过滤规则
-  //
-  if (whiteList && config.inputXssFilter) {
-    this.addInputRule(function (root) {
+	// 添加input过滤规则
+	//
+	if (whiteList && config.inputXssFilter) {
+		this.addInputRule(function (root) {
 
-      root.traversal(function(node) {
-        if (node.type !== 'element') {
-          return false;
-        }
-        filter(node);
-      });
-    });
-  }
-  // 添加output过滤规则
-  //
-  if (whiteList && config.outputXssFilter) {
-    this.addOutputRule(function (root) {
+			root.traversal(function(node) {
+				if (node.type !== 'element') {
+					return false;
+				}
+				filter(node);
+			});
+		});
+	}
+	// 添加output过滤规则
+	//
+	if (whiteList && config.outputXssFilter) {
+		this.addOutputRule(function (root) {
 
-      root.traversal(function(node) {
-        if (node.type !== 'element') {
-          return false;
-        }
-        filter(node);
-      });
-    });
-  }
+			root.traversal(function(node) {
+				if (node.type !== 'element') {
+					return false;
+				}
+				filter(node);
+			});
+		});
+	}
 
 };
 
@@ -9080,7 +9080,7 @@ UM.ui.define('colorpicker', {
                 recordStack: [],
                 //可用项列表
                 items: [],
-            //item对应的值列表
+		        //item对应的值列表
                 value: [],
                 comboboxName: '',
                 selected: '',
@@ -10622,7 +10622,7 @@ UM.registerUI('autofloat',function(){
             docStyle.backgroundImage = 'url("about:blank")';
             docStyle.backgroundAttachment = 'fixed';
         }
-        var bakCssText,
+        var	bakCssText,
             placeHolder = document.createElement('div'),
             toolbarBox,orgTop,
             getPosition=function(element){

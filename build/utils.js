@@ -77,8 +77,14 @@ exports.getMultiEntries = function() {
   var files1 = glob.sync('src/index.html')
   var files2 = glob.sync('src/apps/**/index.html')
   // 如果不需要多页配置，只需 files2 = []即可
-  var files = [].concat(files1).concat(files2)
+  var files = []
   var entries = {}
+  if(files1) {
+    files = files.concat(files1)
+  }
+  if(files2) {
+    files = files.concat(files2)
+  }
 
   files.forEach(function(f) {
     var name = /((?:.*\/)index)\.html/.exec(f)[1] //moudule/index这样的文件名

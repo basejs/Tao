@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import Element from 'element-ui'
 import localCN from '@/common/langs/zh-CN'
 import localEN from '@/common/langs/en-US'
 import elemeEN from 'element-ui/lib/locale/lang/en'
 import elemeCN from 'element-ui/lib/locale/lang/zh-CN'
 
 Vue.use(VueI18n)
-Vue.use(Element)
 
 Vue.config.lang = 'zh-CN'
 Vue.locale('zh-CN', {
