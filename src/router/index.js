@@ -1,18 +1,30 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-Vue.use(Router)
-
-const routejs = require.context('@/apps/', true, /\/router\/index\.js$/)
-let routes = []
-routejs.keys().forEach(r => {
-  const route = routejs(r).default
+const routerApp = require.context('@/apps/', true, /\/router\/index\.js$/)
+let routesApp = []
+routerApp.keys().forEach(r => {
+  const route = routerApp(r).default
   if(Array.isArray(route)) {
-    routes = routes.concat(route)
+    routesApp = routesApp.concat(route)
   } else {
-    routes.push(route)
+    routesApp.push(route)
   }
 })
+
+const routerModule = require.context('@/containers/', true, /\/router\/index\.js$/)
+
+let routesModule = []
+routerModule.keys().forEach(r => {
+  const route = routerModule(r).default
+  if(Array.isArray(route)) {
+    routesModule = routesModule.concat(route)
+  } else {
+    routesModule.push(route)
+  }
+})
+
+Vue.use(Router)
 
 export default new Router({
   mode: 'history',
@@ -21,22 +33,16 @@ export default new Router({
       path: '/',
       component: () => import('@/containers/main.vue'),
       children: [
+        ...routesModule,
         {
-          path: '',
-          component: () => import('@/containers/home/index.vue'),
+          path: '*',
+          component: () => import('@/components/404/index.vue'),
           meta: {
-            title: '首页',
+            title: '404',
           },
-        },
+        }
       ],
     },
-    ...routes,
-    {
-      path: '*',
-      component: () => import('@/status/404/index.vue'),
-      meta: {
-        title: '404',
-      },
-    },
+    ...routesApp,
   ]
 })

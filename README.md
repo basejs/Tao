@@ -1,203 +1,21 @@
-# Tao
+# test
 
-> 根据项目经验提炼的一套通用型前端架构，采用Vue技术栈，基于vue-cli搭建集成eslint(airbnb)。集成多页打包配置，便于项目扩展，模块拆分。
-> 集成elementui框架，基于vue-i18n集成多语言环境。
+> A Vue.js project
 
-## 启动步骤
+## Build Setup
 
 ``` bash
-# 安装依赖
+# install dependencies
 npm install
 
-# 启动本地服务 localhost:9527
-npm start
+# serve with hot reload at localhost:8080
+npm run dev
 
-# 打包
+# build for production with minification
 npm run build
 
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
 
-## 注意事项
-
-#### 目录结构
-只提取我认为重要的目录或文件进行标注说明。
-``` bash
-Tao/
-  ├── build/  webpack打包配置目录
-  │   ├──
-  │   ├── dev-server.js  本地服务器
-  │   ├── utils.js  工具函数，多页入口配置也在这里
-  │   ├── vue-loader.conf.js  cssloader
-  │   ├── webpack.base.conf.js 通用配置项
-  │   ├── webpack.dev.conf.js 开发环境配置项
-  │   ├── webpack.prod.conf.js 生产环境配置项
-  │   ├──
-  ├── config/  环境配置
-  │   ├──
-  │   ├── index.js  webpack开发与生产环境的差异化配置
-  │   ├── server.js  自定义的服务器地址，用于转发ajax请求
-  │   ├── (dev|prod).evn.js  环境变量
-  │   ├──
-  ├── src/  开发目录
-  │   ├──
-  │   ├── assets/  资源目录
-  │       ├──
-  │       ├── images/  图片
-  │       ├── styles/  sass/css/less
-  │       ├── fonts/  字体图标
-  │       ├── media/  媒体资源
-  │   ├──
-  │   ├── common/ 全局资源 
-  │       ├──
-  │       ├── filters/  Vue过滤器
-  │       ├── langs/  语言包(已提供缺省语言包时自动取中文包的写法)
-  │       ├── libs/  第三方js
-  │       ├── mixins/  Vue混合对象
-  │       ├── plugins/  全局行为
-  │           ├── 
-  │           ├── axios.js  axios拦截器
-  │           ├── filter.js  绑定全局filter(默认只有一个时间格式format)
-  │           ├── i18n.js  配置多语言环境(默认中文)
-  │           ├── router.js  全局路由处理
-  │           ├── index.js  入口文件
-  │   ├──
-  │   ├── components/  全局组件
-  │   ├──
-  │   ├── api/  请求目录(分离所有的axios的请求，按模块书写)
-  │   ├──
-  │   ├── store/  vuex所有模块共享，不跟随打包拆分以便于管理
-  │       ├──
-  │       ├── getters/ 
-  │       ├── state/
-  │       ├── actions/  
-  │       ├── mutations/ 
-  │           ├──
-  │           ├── common.js  全局mutations
-  │           ├── index.js  将同目录下其他的mutations绑定到store对象
-  │   ├──
-  │   ├── apps/  多页模块目录，目录下所有包含index.html目录会被打包成多页模块
-  │       ├──
-  │       ├── m/  移动端
-  │           ├── 
-  │           ├── router/  路由配置目录
-  │           ├── components/  模块下公共组件
-  │           ├── containers/  模块首页路由
-  │               ├── home/  首页视图
-  │               ├── main.vue  路由入口视图
-  │           ├── index.html  模块打包模板
-  │           ├── index.js  模块实例化入口
-  │       ├──
-  │   ├── 
-  │   ├── containers/  管理端视图目录
-  │       ├── home/  管理端首页视图
-  │       ├── main.vue  管理端首页视图
-  │   ├── 
-  │   ├── index.html  管理端首页模板
-  │   ├── index.js  管理端实例化入口
-  │
-  ├── public/  静态资源目录(不用webpack加载的资源)
-  │
-  ├── dist/  生产代码目录
-  │
-  ├── node_modules/  包文件目录
-  │
-  ├── .eslintrc.js  eslint规则
-  │
-  ├── .eslintignore  eslint过滤文件
-  │
-  ├── .babelrc  babel规则补充
-  │
-  ├── .gitignore  git过滤文件
-  │
-  ├── .postcssrc.js  postcss 插件
-  │
-  ├── package.json 依赖包和启动命令配置文件
-  │
-  └── etc
-```
-
-#### 代码段说明
-**多页打包配置**
-```javascript
-// build/utils.js
-exports.getMultiEntries = function() {
-  // 配置依赖index.html，自动识别src/apps下的目录进行多页打包
-  var files1 = glob.sync('src/index.html')
-  var files2 = glob.sync('src/apps/**/index.html')
-  // 如果不需要多页配置，只需 files2 = []即可
-  var files = []
-  var entries = {}
-  if(files1) {
-    files = files.concat(files1)
-  }
-  if(files2) {
-    files = files.concat(files2)
-  }
-
-  files.forEach(function(f) {
-    var name = /((?:.*\/)index)\.html/.exec(f)[1] //moudule/index这样的文件名
-    if (!name) return
-
-    entries[name.replace(/^src\/(apps\/)?/, '')] = './' + name + '.js'
-  })
-  return entries
-}
-```
-
-**支持history路由**
-```javascript
-// build/dev-server.js 默认已支持所有多页目录history，如需修改，请重写rewrites
-app.use(require('connect-history-api-fallback')({
-  rewrites: rewrites,
-}))
-```
-
-**页面标题**
-```javascript
-  // mobile模块已集成vue-wechat-title，用通过router中定义meta修改标题
-  // src/m/router/inde.js 
-  {
-    path: '/m',
-    component: () => import('../containers/main.vue'),
-    meta: {
-      title: '首页',
-    },
-  }
-```
-
-**移动端适配**
-```sass
-// 移动端提供了2种适配方式lib-flexible和vw
-// src/assets/styles/function/_px2rem.scss  依赖flexible计算根字体的font-size
-// 需在src/apps/mobile/index.html中引入<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
-@function px2rem($px, $designWidth: 750) {
-  @return ($px / $designWidth) * 10rem;
-}
-// src/assets/styles/function/_px2vw.scss
-// 建议使用vw进行适配，因为这种方式对于小数圆角有更好的支持，并且不依赖于js计算，更加的优雅，如果需要了解更多的用法，可以参考http://www.w3cplus.com/css/vw-for-layout.html
-@function px2vw($px, $designWidth: 750) {
-  @return ($px * (100 / $designWidth)) * 1vw;
-}
-
-// 2者用法都类似
-.test1 {
-  width: px2vw(20);
-  height: px2vw(20);
-}
-.test1 {
-  width: px2rem(20);
-  height: px2rem(20);
-}
-```
-
-#### 建议或约定
--  eslit建议不要关闭。
--  class名称遵循BEM规范。
--  **多页模块间跳转请使用href**，模块内部路由跳转使用<router-link>或router.push()，不要用a标签。
--  如果模块比较大(资源文件或页面比较多)，可以考虑彻底分离全局assets目录到对应模块下
--  模块(多页模块)间vuex状态不共享，如果涉及跨模块共享vuex时，请善用本地缓存配合
-
-#### 已知问题
--  多页打包带来vuex状态好像无法共享，暂时没有想到很好的办法解决。
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

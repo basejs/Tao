@@ -1,0 +1,16 @@
+.umeditor {
+  box-sizing: border-box;
+  img, video{
+    max-width: 100%;
+  }
+  h1,h2,h3,h4,h5,h6{
+    padding: 5px 0;
+    line-height: auto;
+  }
+  h1{
+    line-height: 32px;
+  }
+  h2{
+    line-height: 24px;
+  }
+}

@@ -6,12 +6,12 @@ export default {
       path: '',
       component: () => import('../containers/home/index.vue'),
       meta: {
-        title: '首页',
+        title: '移动端首页',
       },
     },
     {
       path: '*',
-      component: () => import('@/status/404/index.vue'),
+      component: () => import('@/components/404/index.vue'),
       meta: {
         title: '404',
       },
