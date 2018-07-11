@@ -67,15 +67,16 @@ Tao/
   │   ├──
   │   ├── api/  请求目录(分离所有的axios的请求，按模块书写)
   │   ├──
-  │   ├── store/  vuex所有模块共享，不跟随打包拆分以便于管理
+  │   ├── store/  vuex状态管理
   │       ├──
   │       ├── getters/ 
   │       ├── state/
   │       ├── actions/  
+  │       ├── modules/  
   │       ├── mutations/ 
   │           ├──
-  │           ├── common.js  全局mutations
-  │           ├── index.js  将同目录下其他的mutations绑定到store对象
+  │           ├── common.js  
+  │           ├── index.js
   │   ├──
   │   ├── apps/  多页模块目录，目录下所有包含index.html目录会被打包成多页模块
   │       ├──
@@ -146,24 +147,22 @@ exports.getMultiEntries = function() {
 }
 ```
 
-**支持history路由**
-```javascript
-// build/dev-server.js 默认已支持所有多页目录history，如需修改，请重写rewrites
-app.use(require('connect-history-api-fallback')({
-  rewrites: rewrites,
-}))
-```
-
 **页面标题**
 ```javascript
   // mobile模块已集成vue-wechat-title，用通过router中定义meta修改标题
   // src/m/router/inde.js 
-  {
+  export default {
     path: '/m',
     component: () => import('../containers/main.vue'),
-    meta: {
-      title: '首页',
-    },
+    children: [
+      {
+        path: '',
+        component: () => import('../containers/home/index.vue'),
+        meta: {
+          title: '移动端首页'
+        }
+      },
+    ]
   }
 ```
 
@@ -193,11 +192,13 @@ app.use(require('connect-history-api-fallback')({
 ```
 
 #### 建议或约定
--  eslit建议不要关闭。
+-  eslit不建议关闭。
 -  class名称遵循BEM规范。
 -  **多页模块间跳转请使用href**，模块内部路由跳转使用<router-link>或router.push()，不要用a标签。
--  如果模块比较大(资源文件或页面比较多)，可以考虑彻底分离全局assets目录到对应模块下
--  模块(多页模块)间vuex状态不共享，如果涉及跨模块共享vuex时，请善用本地缓存配合
+-  组件以目录为区间，并且遵循样式与视图分离，一个组件应该包含一个index.vue文件和一个index.scss文件
+-  模块(多页模块)间store状态不共享，如果涉及跨模块共享vuex时，请善用本地缓存配合
 
 #### 已知问题
--  多页打包带来vuex状态好像无法共享，暂时没有想到很好的办法解决。
+-  多端项目复杂度增加之后，开发环境会导致内存溢出，解决方式可以在手动修改/node_modules/.bin/webpack-dev-server文件，在首行位置加上#!/usr/bin/env node --max_old_space_size=4096
+-  ESlint报错不会中断浏览器预览，会造成潜意识忽略eslint问题
+
