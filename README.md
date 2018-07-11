@@ -200,5 +200,4 @@ exports.getMultiEntries = function() {
 
 #### 已知问题
 -  多端项目复杂度增加之后，开发环境会导致内存溢出，解决方式可以在手动修改/node_modules/.bin/webpack-dev-server文件，在首行位置加上#!/usr/bin/env node --max_old_space_size=4096
--  ESlint报错不会中断浏览器预览，会造成潜意识忽略eslint问题
 
