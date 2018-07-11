@@ -5,7 +5,7 @@ const routerApp = require.context('@/apps/', true, /\/router\/index\.js$/)
 let routesApp = []
 routerApp.keys().forEach(r => {
   const route = routerApp(r).default
-  if(Array.isArray(route)) {
+  if (Array.isArray(route)) {
     routesApp = routesApp.concat(route)
   } else {
     routesApp.push(route)
@@ -17,7 +17,7 @@ const routerModule = require.context('@/containers/', true, /\/router\/index\.js
 let routesModule = []
 routerModule.keys().forEach(r => {
   const route = routerModule(r).default
-  if(Array.isArray(route)) {
+  if (Array.isArray(route)) {
     routesModule = routesModule.concat(route)
   } else {
     routesModule.push(route)
@@ -33,6 +33,7 @@ export default new Router({
       path: '/',
       component: () => import('@/containers/main.vue'),
       children: [
+        ...routesApp,
         ...routesModule,
         {
           path: '*',
@@ -43,6 +44,5 @@ export default new Router({
         }
       ],
     },
-    ...routesApp,
   ]
 })

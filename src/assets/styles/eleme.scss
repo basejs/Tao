@@ -1,0 +1,219 @@
+@import '~@/assets/styles/variables/colors';
+@import '~@/assets/styles/mixins/_ellipsis.scss';
+
+.el-input__inner{
+  height: 36px;
+  line-height: 36px;
+}
+.el-input__icon{
+  line-height: 36px;
+}
+.el-button{
+  height: 40px;
+  line-height: 40px;
+  padding: 0 24px;
+  font-size: 14px;
+  &.is-round{
+    padding: 0 24px;
+  }
+  &--medium{
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+  }
+  &--small{
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
+  }
+  &--primary{
+    &, &:focus{
+      background-color: $color-primary;
+      border-color: $color-primary;
+      color: #fff;
+    }
+    &:hover{
+      background-color: $color-primary--hover;
+      border-color: $color-primary--hover;
+    }
+    &.is-plain{
+      @extend .el-button--primary;
+    }
+  }
+  &--danger{
+    &.is-plain{
+      border-color: color-danger;
+      background-color: #ffffff;
+      color: $color-danger;
+    }
+  }
+  &--info{
+    &.is-plain{
+      background-color: #ffffff;
+    }
+  }
+  &--text{
+    color: #0F8EFE;
+    padding: 0;
+    &:hover{
+      color: #004FFF;
+    }
+  }
+}
+.el-table{
+  td{
+    padding: 8px;
+  }
+  th{
+    padding: 12px 8px;
+  }
+  &-column--selection .cell{
+    font-size: 0;
+  }
+}
+.el-message{
+  min-width: auto;
+  top: 16px;
+  padding: 10px 24px 10px 10px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  display: inline-block;
+  pointer-events: all;
+  border: none;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.65);
+  &__icon{
+    display: inline-block;
+    vertical-align: baseline;
+    margin-right: 8px;
+    font-size: 16px;
+    top: 1px;
+    position: relative;
+  }
+  &__content{
+    display: inline;
+    text-align: justify;
+    padding-right: 0;
+  }
+  &__closeBtn{
+    right: 6px;
+  }
+}
+.el-pagination{
+  text-align: center;
+}
+
+.el-dialog{
+  min-width: 280px;
+  border-radius: 5px;
+  &__header{
+    padding: 24px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+    &btn{
+      top: 24px;
+    }
+  }
+  &__title{
+    color: #1f2d3d;
+    font-size: 16px;
+    line-height: 16px;
+  }
+  &__body{
+    padding: 20px 24px;
+  }
+  .el-form-item__label{
+    padding-right: 30px;
+    &:before{
+      margin-left: -10px;
+      margin-right: 0;
+    }
+  }
+  &__footer{
+    padding: 15px 0;
+    text-align: center;
+    border-top: 1px solid #e5e5e5;
+    .el-button {
+      min-width: 85px;
+    }
+  }
+}
+.el-message-box{
+  width: 380px;
+  position: relative;
+  padding-bottom: 0;
+  overflow: visible;
+  &__header{
+    padding-top: 116px;
+  }
+  &__title{
+    color: #1f2d3d;
+    text-align: center;
+    font-size: 14px;
+    line-height: 14px;
+    max-height: 14px;
+    @include ellipsis();
+  }
+  &__content{
+    position: static;
+    padding: 0 0 50px 0;
+    text-align: center;
+  }
+  &__status{
+    position: absolute;
+    top: 75px;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-left: -26px;
+    text-align: center;
+    font-size: 50px !important;
+    line-height: 50px;
+    &.el-icon-warning{
+      color: #ff8b0d;
+    }
+  }
+  &__message{
+    color: #5e6d82;
+    margin-left: 0 !important;
+    padding: 0 20px !important;
+    font-size: 12px;
+    p{
+      line-height: 28px;
+    }
+  }
+  &__btns{
+    padding: 20px;
+    background-color: #eff2f7;
+    text-align: center;
+    button{
+      font-size: 12px;
+      height: 35px;
+      line-height: 35px;
+      width: 90px;
+      padding: 0;
+    }
+  }
+  &--reverse{
+    .el-message-box__btns{
+      button{
+        &:first-child{
+          transform: translateX(100%);
+          &:last-child{
+            transform: translateX(0);
+          }
+        }
+        &:nth-child(2){
+          transform: translateX(-100%);
+          margin-left: -10px;
+        }
+      }
+    }
+  }
+}
+.el-select-dropdown .popper__arrow{
+  transform: translateX(0);
+}

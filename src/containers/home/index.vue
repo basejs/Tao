@@ -1,11 +1,11 @@
 <template>
-  <div class="admin-index">
-    管理端首页
-    <a href="/m">移动端</a>
+  <div class="design">
+    首页<a href="/m">移动端首页</a>
   </div>
 </template>
 <script>
-export default {
+import './index.scss'
 
+export default {
 }
 </script>

@@ -1,3 +1,0 @@
-@function px2vw($px, $designWidth: 750) {
-  @return ($px * (100 / $designWidth)) * 1vw;
-}

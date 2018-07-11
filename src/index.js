@@ -7,10 +7,11 @@ import '@/common/plugins'
 import './index.scss'
 
 Vue.config.productionTip = false
-Vue.config.devtools = false
+// Vue.config.devtools = true
+
 Vue.use(VueWechatTitle)
 
-if(module.hot) {
+if (module.hot) {
   module.hot.accept()
 }
 

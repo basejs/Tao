@@ -3,10 +3,8 @@
 
 html,
 body {
-  font-size: 12px;
-  font-family: 'PingFangSC', 'MicrosoftYaHei', 'HelveticaNeue';
   height: 100%;
-  background-color: #ccc;
+  background: rgba(246, 246, 246, 1);;
 }
 
 .wrapper {
@@ -23,7 +21,7 @@ body {
       width: px2vw(20);
       height: px2vw(20);
       border-radius: 100%;
-      background: #f00;
+      background: #F00;
       margin: auto;
       position: relative;
     }

@@ -1,8 +1,10 @@
 export default {
-  CHANG_LANGUAGE(state, lang) {
+  // 语言
+  changeLanguage(state, lang) {
     state.lang = lang
   },
-  UPDATE_TITLE(state, title) {
+  // 全局TItle
+  updateTitle(state, title) {
     state.title = title
   },
 }

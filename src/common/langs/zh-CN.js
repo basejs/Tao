@@ -1,5 +1,15 @@
-import common from './common/zh-CN'
-import manager from './manager/zh-CN'
-import mobile from './mobile/zh-CN'
+const files = require.context('./', true, /^\.\/zh-CN\.js$/i)
+const data = {}
 
-export default { common, manager, mobile }
+files.keys().forEach(key => {
+  const k = key.match(/\w+/)[0]
+  if (k) {
+    data[k] = {
+      ...files(key).default
+    }
+  }
+})
+
+export default {
+  ...data
+}

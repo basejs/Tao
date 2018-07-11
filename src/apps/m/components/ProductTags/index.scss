@@ -1,0 +1,15 @@
+.product-tags {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  &__item {
+    background: rgba(235, 244, 255, 1);
+    margin-right: 5px;
+    padding: 0 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(191, 220, 255, 1);
+    font-size: 12px;
+    color: rgba(57, 136, 255, 1);
+    transform: scale(.9);
+  }
+}

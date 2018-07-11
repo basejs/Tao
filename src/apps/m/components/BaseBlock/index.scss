@@ -1,0 +1,26 @@
+.base-block {
+  background-color: #FFF;
+
+  &--mp {
+    padding: 15px 10px;
+    margin-bottom: 10px;
+  }
+
+  // todo 迁移走
+  &__title {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: rgba(50, 50, 50, 1);
+    &::after, &::before {
+      background: rgba(216, 216, 216, 1);
+      margin: 0 15px;
+      width: 37px;
+      height: 1px;
+      content: " ";
+      transform: scaleY(.5);
+    }
+  }
+}

@@ -1,35 +1,45 @@
-// https://eslint.org/docs/user-guide/configuring
+// http://eslint.org/docs/user-guide/configuring
 
 module.exports = {
   root: true,
+  parser: 'babel-eslint',
   parserOptions: {
-    parser: 'babel-eslint'
+    sourceType: 'module'
   },
   env: {
     browser: true,
   },
-  extends: [
-    // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    'plugin:vue/essential',
-    // https://github.com/standard/standard/blob/master/docs/RULES-en.md
-    'standard'
-  ],
+  extends: 'airbnb-base',
   // required to lint *.vue files
   plugins: [
-    'vue'
+    'html'
   ],
   'globals': {
     'axios': true,
     '@': true,
     'UM': true,
-    '_': true
+    '_': true,
+  },
+  // check if imports actually resolve
+  'settings': {
+    'import/resolver': {
+      'webpack': {
+        'config': 'build/webpack.base.conf.js'
+      }
+    }
   },
   // add your custom rules here
-  rules: {
-    // allow async-await
-    'generator-star-spacing': 'off',
-    
+  'rules': {
+    'no-debugger': 'error',
+    // don't require .vue extension when importing
+    'import/extensions': ['error', 'always', {
+      'js': 'never',
+      'vue': 'never'
+    }],
+    // allow optionalDependencies
+    'import/no-extraneous-dependencies': ['error', {
+      'optionalDependencies': ['test/unit/index.js']
+    }],
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow async-await
@@ -46,19 +56,19 @@ module.exports = {
     // if语句中只有一行时不必{}
     // 'curly': [2, 'multi-or-nest'],
     // if左右空格设置
-    'keyword-spacing': [2, {
-      'overrides': {
-        'if': {
-          'after': false
-        },
-        'for': {
-          'after': false
-        },
-        'while': {
-          'after': false
-        }
-      }
-    }],
+    // 'keyword-spacing': [2, {
+    //   'overrides': {
+    //     'if': {
+    //       'after': false
+    //     },
+    //     'for': {
+    //       'after': false
+    //     },
+    //     'while': {
+    //       'after': false
+    //     }
+    //   }
+    // }],
     // if(true)
     'no-constant-condition': 0,
     // 下划线变量
@@ -73,9 +83,8 @@ module.exports = {
     // 箭头函数中的return
     "consistent-return": 0,
     // allow debugger during development
-    // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': 'error',
-    'eol-last': 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'global-require': 0,
+    'no-case-declarations': 0
   }
 }

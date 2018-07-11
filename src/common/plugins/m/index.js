@@ -1,5 +1,6 @@
-import './mintui'
-import '../i18n'
+// import './mintui'
+// import '../i18n'
+import './vant'
 import '../filter'
 import '../router'
 import '../axios'

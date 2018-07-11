@@ -1,4 +1,4 @@
 build/*.js
 config/*.js
-src/common/**/*js
+src/common/**/*.js
 .eslintrc.js

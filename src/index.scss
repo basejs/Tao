@@ -1,16 +1,8 @@
+@import '~@/assets/styles/reset.scss';
 @import '~@/assets/styles/eleme.scss';
-@import '~@/assets/styles/common.scss';
-@import '~@/assets/styles/mixins/_clearfix.scss';
+@import '~@/assets/fonts/index.scss';
 
-html, body{
+html, body, .wrap{
   height: 100%;
   background: #e6e9f0;
-}
-
-.manager{
-  height: 100%;
-  position: relative;
-  overflow: auto;
-  box-sizing: border-box;
-  @include clearfix();
 }
